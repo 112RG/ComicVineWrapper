@@ -1,0 +1,31 @@
+{
+  "name": "comicvine-wrapper",
+  "version": "0.0.1",
+  "description": "A wrapper for the ComicVine API",
+  "main": "index.js",
+  "author": "_112",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "form-data": "^2.3.2",
+    "prompt": "^1.0.0"
+  },
+  "devDependencies": {
+		"dotenv": "^6.0.0",
+		"eslint": "^5.3.0",
+		"eslint-config-standard": "^11.0.0",
+		"eslint-plugin-import": "^2.8.0",
+		"eslint-plugin-node": "^6.0.0",
+		"eslint-plugin-promise": "^3.6.0",
+		"eslint-plugin-standard": "^3.0.1"
+	},
+	"eslintConfig": {
+		"extends": "standard",
+		"rules": {
+			"no-console": 0
+		}
+	}
+}
