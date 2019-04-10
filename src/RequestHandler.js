@@ -1,8 +1,8 @@
 const axios = require('axios')
+const {setup} = require('axios-cache-adapter')
 const Endpoints = require('./Endpoints')
 const version = require('../package.json').version
 const FormData = require('form-data')
-
 /**
  * Request Handler class
  * @private
@@ -16,12 +16,22 @@ class RequestHandler {
      * @constructor
      * @private
      */
+    
   constructor (ratelimiter, options) {
     this.ratelimiter = ratelimiter
     this.options = {baseHost: Endpoints.BASE_HOST, baseURL: Endpoints.BASE_URL}
     Object.assign(this.options, options)
-    this.client = axios.create({
+    this.client = setup({
       baseURL: this.options.baseHost + Endpoints.BASE_URL,
+      cache: {
+        // Cache expiration in milliseconds, here 15min
+        maxAge: 15 * 60 * 1000,
+        // Cache exclusion rules
+        exclude: {
+            // Store responses from requests with query parameters in cache
+            query: false
+        }
+      },
       params: {
         api_key: options.token
       },
@@ -65,9 +75,12 @@ class RequestHandler {
               break
           }
           this.latency = Date.now() - latency
+
           let offsetDate = this._getOffsetDateFromHeader(request.headers['date'])
+
           // this._applyRatelimitHeaders(bkt, request.headers, offsetDate, endpoint.endsWith('/reactions/:id'))
           if (request.data) {
+            request.data['fromCache'] = request.request.fromCache
             return resolve(request.data)
           }
           return resolve()
